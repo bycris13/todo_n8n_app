@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+
+class SelectCategory extends StatelessWidget {
+  final List<Map<String, dynamic>> categories = [
+    {'icon': Icons.work, 'color': Colors.grey, 'label': 'Work'},
+    {'icon': Icons.favorite, 'color': Colors.orange, 'label': 'Love'},
+    {'icon': Icons.home, 'color': Colors.green, 'label': 'Home'},
+    {'icon': Icons.calendar_month, 'color': Colors.purple, 'label': 'Event'},
+    {'icon': Icons.person, 'color': Colors.blue, 'label': 'Personal'},
+  ];
+
+  SelectCategory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Text('Category', style: TextStyle(fontSize: 17)),
+        SizedBox(width: 25),
+        Expanded(
+          child: SizedBox(
+            height: 70, // controla el tamaño del contenedor
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(width: 15),
+              scrollDirection: Axis.horizontal, // importante
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return Container(
+                  width: 55,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: category['color'].withOpacity(0.15),
+                    border: Border.all(color: category['color'], width: 2),
+                  ),
+                  child: Icon(
+                    category['icon'],
+                    color: category['color'],
+                    size: 28,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
