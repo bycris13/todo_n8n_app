@@ -1,3 +1,3 @@
-# ecomerce_n8n
+# TODO n8n App
 
 A new Flutter project.
