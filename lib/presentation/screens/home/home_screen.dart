@@ -1,4 +1,5 @@
 import 'package:ecomerce_n8n/presentation/providers/task_provider.dart';
+import 'package:ecomerce_n8n/presentation/screens/details/task_detail_screen.dart';
 import 'package:ecomerce_n8n/presentation/widgets/task_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -75,6 +76,12 @@ class HomeScreen extends StatelessWidget {
                             elevation: 1,
                             margin: const EdgeInsets.symmetric(vertical: 6),
                             child: ListTile(
+                              onTap: () {
+                                context.pushNamed(
+                                  TaskDetailScreen.name,
+                                  extra: task,
+                                );
+                              },
                               leading: CircleAvatar(
                                 backgroundColor: colors.primary.withOpacity(
                                   0.15,
@@ -133,6 +140,12 @@ class HomeScreen extends StatelessWidget {
                             elevation: 1,
                             margin: const EdgeInsets.symmetric(vertical: 6),
                             child: ListTile(
+                              onTap: () {
+                                context.pushNamed(
+                                  TaskDetailScreen.name,
+                                  extra: task,
+                                );
+                              },
                               leading: CircleAvatar(
                                 backgroundColor: Colors.green.withOpacity(0.15),
                                 child: Icon(task.icon, color: Colors.green),
