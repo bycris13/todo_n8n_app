@@ -6,13 +6,15 @@ class Task {
   final DateTime date;
   final TimeOfDay time;
   final String? note;
-  final bool isCompleted;
+  final IconData icon;
+  bool isCompleted;
 
   Task({
     required this.title,
     required this.category,
     required this.date,
     required this.time,
+    required this.icon,
     this.note,
     this.isCompleted = false,
   });

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SaveTaskButton extends StatelessWidget {
-  const SaveTaskButton({super.key});
+  final VoidCallback onSave; // 👈 función que se ejecuta al guardar
+
+  const SaveTaskButton({super.key, required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class SaveTaskButton extends StatelessWidget {
             final controller = TextEditingController();
 
             return AlertDialog(
-              title: const Text('Enter your email'),
+              title: const Text('Enter your email to save the task'),
               content: TextField(
                 controller: controller,
                 decoration: const InputDecoration(
@@ -27,16 +29,13 @@ class SaveTaskButton extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(
-                      context,
-                      controller.text,
-                    ); // Devuelve el texto
+                    Navigator.pop(context, controller.text);
                   },
                   child: const Text('OK'),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context); // Cierra sin devolver nada
+                    Navigator.pop(context);
                   },
                   child: const Text('Cancel'),
                 ),
@@ -45,13 +44,15 @@ class SaveTaskButton extends StatelessWidget {
           },
         );
 
-        if (email != null && email.isNotEmpty) {
+        if (email != null && email.contains('@')) {
+          onSave(); // 👈 ejecuta la lógica de guardar
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text('Task added for $email')));
+          Navigator.pop(context); // 👈 vuelve a HomeScreen
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Please enter your email')),
+            const SnackBar(content: Text('Please enter a valid email')),
           );
         }
       },
@@ -62,7 +63,7 @@ class SaveTaskButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
       child: const Text(
-        'Add New Task',
+        'Save Task',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );

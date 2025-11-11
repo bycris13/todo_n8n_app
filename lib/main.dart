@@ -1,9 +1,16 @@
 import 'package:ecomerce_n8n/config/router/app_router.dart';
 import 'package:ecomerce_n8n/config/theme/app_theme.dart';
+import 'package:ecomerce_n8n/presentation/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => TaskProvider())],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

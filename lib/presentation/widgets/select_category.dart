@@ -1,66 +1,83 @@
 import 'package:flutter/material.dart';
 
 class SelectCategory extends StatefulWidget {
-  SelectCategory({super.key});
+  final Function(String, IconData) onCategorySelected;
+
+  const SelectCategory({super.key, required this.onCategorySelected});
 
   @override
   State<SelectCategory> createState() => _SelectCategoryState();
 }
 
 class _SelectCategoryState extends State<SelectCategory> {
+  String? selectedCategory;
+
   final List<Map<String, dynamic>> categories = [
-    {'icon': Icons.work, 'color': Colors.grey, 'label': 'Work'},
-    {'icon': Icons.favorite, 'color': Colors.orange, 'label': 'Love'},
-    {'icon': Icons.home, 'color': Colors.green, 'label': 'Home'},
-    {'icon': Icons.calendar_month, 'color': Colors.purple, 'label': 'Event'},
-    {'icon': Icons.person, 'color': Colors.blue, 'label': 'Personal'},
+    {'name': 'Work', 'icon': Icons.work, 'color': Colors.blue},
+    {'name': 'Study', 'icon': Icons.school, 'color': Colors.green},
+    {'name': 'Home', 'icon': Icons.home, 'color': Colors.orange},
+    {'name': 'Shopping', 'icon': Icons.shopping_cart, 'color': Colors.purple},
+    {'name': 'Health', 'icon': Icons.favorite, 'color': Colors.red},
   ];
-  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Category', style: TextStyle(fontSize: 17)),
-        SizedBox(width: 25),
-        Expanded(
-          child: SizedBox(
-            height: 70, // controla el tamaño del contenedor
-            child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(width: 15),
-              scrollDirection: Axis.horizontal, // importante
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                final selected = index == selectedIndex;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  },
-                  child: Container(
-                    width: 55,
-                    height: 55,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: category['color'].withOpacity(0.15),
-                      border: Border.all(
-                        color: category['color'],
-                        width: selected ? 4 : 2,
-                      ),
-                    ),
-                    child: Icon(
-                      category['icon'],
-                      color: category['color'],
-                      size: 28,
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 60,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 15),
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final isSelected = selectedCategory == category['name'];
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedCategory = category['name'];
+                  });
+                  widget.onCategorySelected(category['name'], category['icon']);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? category['color'].withOpacity(0.2)
+                        : Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected
+                          ? category['color']
+                          : Colors.grey.shade300,
                     ),
                   ),
-                );
-              },
-            ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        category['icon'],
+                        color: isSelected
+                            ? category['color']
+                            : Colors.grey[600],
+                      ),
+                      const SizedBox(width: 8),
+                      Text(category['name']),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }

@@ -5,10 +5,14 @@ class CommonTextField extends StatelessWidget {
   final String label;
   final Widget? suffixIcon;
   final int? maxLines;
+  final TextEditingController controller;
+  final bool readOnly;
   const CommonTextField({
     super.key,
     required this.labelText,
     required this.label,
+    required this.controller,
+    required this.readOnly,
     this.suffixIcon,
     this.maxLines,
   });
@@ -21,6 +25,8 @@ class CommonTextField extends StatelessWidget {
         Text(labelText, style: TextStyle(fontSize: 17)),
         SizedBox(height: 10),
         TextField(
+          readOnly: readOnly,
+          controller: controller,
           decoration: InputDecoration(
             alignLabelWithHint: true,
             suffixIcon: suffixIcon,
