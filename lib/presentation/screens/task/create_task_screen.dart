@@ -1,4 +1,5 @@
 import 'package:ecomerce_n8n/domain/entities/task.dart';
+import 'package:ecomerce_n8n/infrastructure/services/n8n_service.dart';
 import 'package:ecomerce_n8n/presentation/providers/task_provider.dart';
 import 'package:ecomerce_n8n/presentation/widgets/common_text_field.dart';
 import 'package:ecomerce_n8n/presentation/widgets/save_task_button.dart';
@@ -144,7 +145,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
 
             // Save button
             SaveTaskButton(
-              onSave: () {
+              onSave: () async {
                 final task = Task(
                   title: titleController.text,
                   category: selectedCategory,
@@ -154,6 +155,23 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   note: noteController.text,
                 );
                 Provider.of<TaskProvider>(context, listen: false).addTask(task);
+
+                final n8nService = N8nService();
+                final success = await n8nService.sendTask(task, context);
+
+                if (!mounted)
+                  return; // 👈 evita usar context si el widget ya se desmontó
+
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Task synced with n8n ✅')),
+                  );
+                  Navigator.pop(context); // volver a HomeScreen
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Failed to sync task ❌')),
+                  );
+                }
               },
             ),
           ],
